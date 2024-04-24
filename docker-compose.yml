@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:4.0.4
+    container_name: mongo_tracking
+    ports:
+      - "27020:27017"
+    volumes:
+      - ./data:/data/db_data_tracking
+    networks:
+      - network
+  service:
+    container_name: backend_tracking
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3009:3009"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/tracking
+    depends_on:
+      - mongo
+    networks:
+      - network
+
+networks:
+  network:
